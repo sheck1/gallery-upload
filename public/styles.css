@@ -4,7 +4,13 @@
     text-align: center;
     background-color: rgba(3, 137, 161, 0.94);
   }
-  
+  .navbar-light .navbar-brand {
+    font-weight: 600;
+    color: rgba(3, 137, 161, 0.94);
+  }
+  .navbar-light .navbar-nav .nav-link {
+    color: rgba(3, 137, 161, 0.94) ;
+  }
   .dropzone {
     border: 2px dashed #ccc;
     padding: 20px;

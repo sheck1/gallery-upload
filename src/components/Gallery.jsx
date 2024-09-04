@@ -32,7 +32,7 @@ const Gallery = ({ images, onDelete }) => {
              className="img-thumbnail"
               src={image.secure_url} 
               alt={image.public_id} 
-              onMouseMove={() => handleImageClick(image)}
+              onClick={() => handleImageClick(image)}
             />
 
         <button className='btn' onClick={() => handleDeleteClick(image.public_id)} disabled={deletingImage === image.public_id}>
