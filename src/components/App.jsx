@@ -12,10 +12,16 @@ const App = () => {
   };
 
   const [deletingImage, setDeletingImage] = useState(null);
+  
   const handleDelete = async (publicId) => {
     setDeletingImage(publicId);
     try {
-      const response = await axios.post('http://localhost:5000/delete-image', {
+      const isLocal = window.location.hostname === 'localhost';
+      const url = isLocal
+        ? 'http://localhost:5000/delete-image'
+        : '/api/deleteImage'; 
+
+      const response = await axios.post(url, {
         public_id: publicId,
       });
   
@@ -55,7 +61,7 @@ const App = () => {
       
       <ImageUpload onUpload={handleUpload} />
       <div className='gallery-image-div'>
-      <Gallery images={images} onDelete={handleDelete} />
+      <Gallery images={images} onDelete={handleDelete}/>
       </div>
    
     </div>

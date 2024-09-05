@@ -1,18 +1,26 @@
-
 import React, { useState } from 'react';
 import Loader from './Loader';
 
 const Gallery = ({ images, onDelete }) => {
   const [previewImage, setPreviewImage] = useState(null);
-  const  [deletingImage, setDeletingImage] = useState(null);
+  const [deletingImage, setDeletingImage] = useState(null);
+  const [error, setError] = useState(null);
 
   if (!images || images.length === 0) {
     return <p>No images to display.</p>;
   }
-  
-  const handleDeleteClick = (publicId) => {
-    setDeletingImage(publicId);
-    onDelete(publicId);
+
+  const handleDeleteClick = async (publicId) => {
+    try {
+      setDeletingImage(publicId);
+      setError(null); 
+      await onDelete(publicId); 
+      setDeletingImage(null); 
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      setError(`Failed to delete image: ${error.message}`);
+      setDeletingImage(null); 
+    }
   };
 
   const handleImageClick = (image) => {
@@ -25,24 +33,29 @@ const Gallery = ({ images, onDelete }) => {
 
   return (
     <div>
+      {error && <div className="error-message">{error}</div>}
+
       <div className="image-gallery">
         {images.map((image, index) => (
           <div key={index} className="image-thumbnail">
-            <img 
-             className="img-thumbnail"
-              src={image.secure_url} 
-              alt={image.public_id} 
+            <img
+              className="img-thumbnail"
+              src={image.secure_url}
+              alt={image.public_id}
               onClick={() => handleImageClick(image)}
             />
-
-        <button className='btn' onClick={() => handleDeleteClick(image.public_id)} disabled={deletingImage === image.public_id}>
-            {deletingImage === image.public_id ? <Loader /> : 'Delete'}
-          </button>
+            <button
+              className="btn"
+              onClick={() => handleDeleteClick(image.public_id)}
+              disabled={deletingImage === image.public_id}
+            >
+              {deletingImage === image.public_id ? <Loader /> : 'Delete'}
+            </button>
           </div>
         ))}
       </div>
 
-   
+  
       {previewImage && (
         <div className="image-modal" onClick={closePreview}>
           <div className="image-preview-content">
