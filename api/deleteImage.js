@@ -15,6 +15,9 @@ module.exports = async (req, res) => {
     if (!public_id) {
       return res.status(400).json({ error: 'No public_id provided' });
     }
+    else if (req.method === 'POST') {
+     return res.status(200).json({message: 'image deleted successfully'})
+    }
 
     try {
       const result = await cloudinary.uploader.destroy(public_id);
@@ -23,7 +26,7 @@ module.exports = async (req, res) => {
       return res.status(500).json({ error: 'Failed to delete image', details: error.message });
     }
   } else {
-    res.setHeader('Allow', ['DELETE']);
+    res.setHeader('Allow', ['POST','DELETE']);
     res.status(405).end(`Method ${req.method} not allowed`);
   }
 };

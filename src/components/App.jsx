@@ -12,17 +12,25 @@ const App = () => {
   };
 
   const [deletingImage, setDeletingImage] = useState(null);
-  
+
   const handleDelete = async (publicId) => {
     setDeletingImage(publicId);
     try {
       const isLocal = window.location.hostname === 'localhost';
       const url = isLocal
-        ? 'http://localhost:5000/delete-image'
+        ? 'http://localhost:5000/delete-image' 
         : '/api/deleteImage'; 
-
-      const response = await axios.post(url, {
-        public_id: publicId,
+  
+      
+      const response = await axios({
+        method: isLocal ? 'POST' : 'DELETE', 
+        url: url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          public_id: publicId, 
+        },
       });
   
       if (response.data.result) {
@@ -30,11 +38,11 @@ const App = () => {
       }
     } catch (error) {
       console.error('Error deleting the image:', error);
-    }  finally {
+    } finally {
       setDeletingImage(null);
     }
   };
-
+  
   return (
     <div className="app">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
